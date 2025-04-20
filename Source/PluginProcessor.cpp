@@ -188,13 +188,18 @@ void _3bandcompressorAudioProcessor::setStateInformation (const void* data, int 
 // Define layout here
 juce::AudioProcessorValueTreeState::ParameterLayout _3bandcompressorAudioProcessor::createParameterLayout()
 {
-    APVTS::ParameterLayout layout;
     using namespace juce;
+    using Range = NormalisableRange<float>;
     
-    // needs parameterID function to enclose IDs
-    layout.add(std::make_unique<juce::AudioParameterFloat>(
-        juce::ParameterID("Treshold", 1), "Threshold", juce::NormalisableRange<float>(-60.0f, -12.0f, 1.0f), 0.0f
-    ));
+    APVTS::ParameterLayout layout;
+
+    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Threshold", 1), "Threshold", Range(-60.0f, -12.0f, 1.0f), 0.0f));
+
+    auto attackReleaseRange = Range(5.0f, 500.0f, 1.0f, 1.0f);
+    
+    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Attack", 1), "Attack", attackReleaseRange, 50));
+    
+    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Release", 1), "Release", attackReleaseRange, 250));
     
     return layout;
 }
