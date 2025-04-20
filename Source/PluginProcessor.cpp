@@ -183,6 +183,19 @@ void _3bandcompressorAudioProcessor::setStateInformation (const void* data, int 
     // whose contents will have been created by the getStateInformation() call.
 }
 
+
+
+// Define layout here
+juce::AudioProcessorValueTreeState::ParameterLayout _3bandcompressorAudioProcessor::createParameterLayout()
+{
+    APVTS::ParameterLayout layout;
+    using namespace juce;
+    
+    
+    return layout;
+}
+
+
 //==============================================================================
 // This creates new instances of the plugin..
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()

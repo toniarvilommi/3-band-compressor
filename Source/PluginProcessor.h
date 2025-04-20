@@ -52,6 +52,13 @@ public:
     //==============================================================================
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
+    
+    
+    // Manages all plugin parameters via createParameterLayout
+    using APVTS = juce::AudioProcessorValueTreeState;
+    static APVTS::ParameterLayout createParameterLayout();
+    
+    APVTS avpts { *this, nullptr, "Parameters", createParameterLayout() };
 
 private:
     //==============================================================================
