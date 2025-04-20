@@ -191,9 +191,15 @@ juce::AudioProcessorValueTreeState::ParameterLayout _3bandcompressorAudioProcess
     APVTS::ParameterLayout layout;
     using namespace juce;
     
+    // needs parameterID function to enclose IDs
+    layout.add(std::make_unique<juce::AudioParameterFloat>(
+        juce::ParameterID("Treshold", 1), "Threshold", juce::NormalisableRange<float>(-60.0f, -12.0f, 1.0f), 0.0f
+    ));
     
     return layout;
 }
+
+
 
 
 //==============================================================================

@@ -58,7 +58,7 @@ public:
     using APVTS = juce::AudioProcessorValueTreeState;
     static APVTS::ParameterLayout createParameterLayout();
     
-    APVTS avpts { *this, nullptr, "Parameters", createParameterLayout() };
+    APVTS apvts { *this, nullptr, "Parameters", createParameterLayout() };
 
 private:
     //==============================================================================
