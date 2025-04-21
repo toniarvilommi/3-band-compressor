@@ -33,8 +33,15 @@ _3bandcompressorAudioProcessorEditor::_3bandcompressorAudioProcessorEditor (_3ba
     
     // === COMBOBOX ===
     addAndMakeVisible(ratioComboBox);
-    ratioAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
-        audioProcessor.apvts, "Ratio", ratioComboBox);
+
+    // fetch and render choices from apvts
+    if (auto* choiceParam = dynamic_cast<juce::AudioParameterChoice*>(audioProcessor.apvts.getParameter("Ratio")))
+    {
+        ratioComboBox.addItemList(choiceParam->choices, 1);
+        
+        ratioAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ComboBoxAttachment>(
+            audioProcessor.apvts, "Ratio", ratioComboBox);
+    }
     
     DBG("ComboBox items count: " + juce::String(ratioComboBox.getNumItems()));
 }
