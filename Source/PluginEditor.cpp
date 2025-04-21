@@ -1,8 +1,8 @@
 /*
   ==============================================================================
-
+ 
     This file contains the basic framework code for a JUCE plugin editor.
-
+ 
   ==============================================================================
 */
 
@@ -13,9 +13,32 @@
 _3bandcompressorAudioProcessorEditor::_3bandcompressorAudioProcessorEditor (_3bandcompressorAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
+    // Set editor size
     setSize (400, 300);
+
+    // === THRESHOLD SLIDER ===
+    thresholdSlider.setSliderStyle(juce::Slider::Rotary);
+    thresholdSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    addAndMakeVisible(thresholdSlider);
+
+    thresholdAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.apvts, "Threshold", thresholdSlider);
+
+    // === ATTACK SLIDER ===
+    attackSlider.setSliderStyle(juce::Slider::Rotary);
+    attackSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    addAndMakeVisible(attackSlider);
+
+    attackAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.apvts, "Attack", attackSlider);
+
+    // === RELEASE SLIDER ===
+    releaseSlider.setSliderStyle(juce::Slider::Rotary);
+    releaseSlider.setTextBoxStyle(juce::Slider::TextBoxBelow, false, 60, 20);
+    addAndMakeVisible(releaseSlider);
+
+    releaseAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
+        audioProcessor.apvts, "Release", releaseSlider);
 }
 
 _3bandcompressorAudioProcessorEditor::~_3bandcompressorAudioProcessorEditor()
@@ -25,16 +48,27 @@ _3bandcompressorAudioProcessorEditor::~_3bandcompressorAudioProcessorEditor()
 //==============================================================================
 void _3bandcompressorAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
+    // Fill background
     g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
 
+    // Draw title
     g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (15.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
+    g.setFont (juce::Font (15.0f)); // Fixed: FontOptions → Font
+    g.drawFittedText ("3-Band Compressor", getLocalBounds().removeFromTop(30), juce::Justification::centred, 1);
 }
 
 void _3bandcompressorAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    auto area = getLocalBounds().reduced(20).removeFromTop(200);
+    auto sliderWidth = 100;
+    auto sliderHeight = 100;
+    auto padding = 20;
+
+    thresholdSlider.setBounds(area.removeFromLeft(sliderWidth));
+    area.removeFromLeft(padding); // space between sliders
+
+    attackSlider.setBounds(area.removeFromLeft(sliderWidth));
+    area.removeFromLeft(padding);
+
+    releaseSlider.setBounds(area.removeFromLeft(sliderWidth));
 }
