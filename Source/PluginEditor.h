@@ -16,15 +16,22 @@ public:
 private:
     _3bandcompressorAudioProcessor& audioProcessor;
 
-    // === Sliders ===
-    juce::Slider thresholdSlider;
-    juce::Slider attackSlider;
-    juce::Slider releaseSlider;
-
+    void addSliderWithLabel(juce::Slider& slider, juce::Label& label, const juce::String& paramID, const juce::String& labelText);
+    
+    // === Sliderss ===
+    juce::Slider thresholdSlider, attackSlider, releaseSlider;
+    
+    // === Combobox ===
+    juce::ComboBox ratioComboBox;
+    
+    // === Labelss ===
+    juce::Label thresholdLabel, attackLabel, releaseLabel, ratioLabel;
+    
     // === Attachments ===
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> thresholdAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attackAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> releaseAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> ratioAttachment;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (_3bandcompressorAudioProcessorEditor)
 };

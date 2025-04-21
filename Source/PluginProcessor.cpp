@@ -193,13 +193,26 @@ juce::AudioProcessorValueTreeState::ParameterLayout _3bandcompressorAudioProcess
     
     APVTS::ParameterLayout layout;
 
-    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Threshold", 1), "Threshold", Range(-60.0f, -12.0f, 1.0f), 0.0f));
+    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Threshold", 1), "Threshold", Range(-60.0f, 12.0f, 1.0f, 1.0f), 0.0f));
 
     auto attackReleaseRange = Range(5.0f, 500.0f, 1.0f, 1.0f);
     
     layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Attack", 1), "Attack", attackReleaseRange, 50));
     
     layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Release", 1), "Release", attackReleaseRange, 250));
+    
+    auto choices = std::vector<double> { 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 50, 100 };
+    juce::StringArray stringArray;
+    for (auto value : choices) {
+        stringArray.add(juce::String(value, 1));
+    }
+    
+    DBG("Ratio Choices: " + stringArray.joinIntoString(", "));
+    
+    layout
+        .add(std::make_unique<AudioParameterChoice>(
+        juce::ParameterID("Ratio", 1), "Ratio", stringArray, 3));
+
     
     return layout;
 }
