@@ -35,6 +35,7 @@ _3bandcompressorAudioProcessorEditor::_3bandcompressorAudioProcessorEditor (_3ba
     addAndMakeVisible(ratioComboBox);
 
     // fetch and render choices from apvts
+    // cast is checking if "Ratio" is nullptr (false) or AudioParameterChoice (true)
     if (auto* choiceParam = dynamic_cast<juce::AudioParameterChoice*>(audioProcessor.apvts.getParameter("Ratio")))
     {
         ratioComboBox.addItemList(choiceParam->choices, 1);
