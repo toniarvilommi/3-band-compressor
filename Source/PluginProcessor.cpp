@@ -213,32 +213,29 @@ void _3bandcompressorAudioProcessor::setStateInformation (const void* data, int 
 // Define layout here
 juce::AudioProcessorValueTreeState::ParameterLayout _3bandcompressorAudioProcessor::createParameterLayout()
 {
-    using namespace juce;
-    using Range = NormalisableRange<float>;
-
     APVTS::ParameterLayout layout;
 
     // threshold
-    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Threshold", 1), "Threshold", Range(-60.0f, 12.0f, 1.0f, 1.0f), 0.0f));
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("Threshold", 1), "Threshold", juce::NormalisableRange<float>(-60.0f, 12.0f, 1.0f, 1.0f), 0.0f));
 
     // attack
-    auto attackRange = Range(5.0f, 500.0f, 1.0f, 1.0f);
-    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Attack", 1), "Attack", attackRange, 50));
+    auto attackRange = juce::NormalisableRange<float>(5.0f, 500.0f, 1.0f, 1.0f);
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("Attack", 1), "Attack", attackRange, 50));
 
     // release
-    auto releaseRange = Range(10.0f, 1000.0f, 1.0f, 1.0f); // example range for release
-    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Release", 1), "Release", releaseRange, 250));
+    auto releaseRange = juce::NormalisableRange<float>(10.0f, 1000.0f, 1.0f, 1.0f);
+    layout.add(std::make_unique<juce::AudioParameterFloat>(juce::ParameterID("Release", 1), "Release", releaseRange, 250));
 
     // ratio
     juce::StringArray stringArray { "1", "1.5", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "50", "100" };
 
     DBG("Ratio Choices: " + stringArray.joinIntoString(", "));
 
-    layout.add(std::make_unique<AudioParameterChoice>(
-        juce::ParameterID("Ratio", 1), "Ratio", stringArray, 3)); // default to "3"
+    layout.add(std::make_unique<juce::AudioParameterChoice>(
+        juce::ParameterID("Ratio", 1), "Ratio", stringArray, 3));
 
     // bypass
-    layout.add(std::make_unique<AudioParameterBool>(juce::ParameterID("Bypass", 1), "Bypass", false));
+    layout.add(std::make_unique<juce::AudioParameterBool>(juce::ParameterID("Bypass", 1), "Bypass", false));
 
     return layout;
 }
