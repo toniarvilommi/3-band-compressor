@@ -33,6 +33,12 @@ _3bandcompressorAudioProcessorEditor::_3bandcompressorAudioProcessorEditor (_3ba
     
     // === COMBOBOX ===
     addAndMakeVisible(ratioComboBox);
+    
+    // === CHECKBOX ===
+    addAndMakeVisible(bypass);
+    bypass.setButtonText("Bypass");
+    
+    bypassAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "Bypass", bypass);
 
     // fetch and render choices from apvts
     // cast is checking if "Ratio" is nullptr (false) or AudioParameterChoice (true)
@@ -80,18 +86,23 @@ void _3bandcompressorAudioProcessorEditor::paint (juce::Graphics& g)
 
 void _3bandcompressorAudioProcessorEditor::resized()
 {
-
     const int margin = 10;
-    
-    const int sliderWidth = 300;
-    const int sliderHeight = 40;
-    
-    const int ratioWidth = 300;
-    const int ratioHeight = 20;
-    
+    const int startX = 80;
+    const int startY = 30;
+    const int width = 300;
 
-    thresholdSlider.setBounds(80, 30, sliderWidth, sliderHeight);
-    attackSlider.setBounds(80, 30 + sliderHeight + margin, sliderWidth, sliderHeight);
-    releaseSlider.setBounds(80, 30 + 2 * (sliderHeight + margin), sliderWidth, sliderHeight);
-    ratioComboBox.setBounds(80, 30 + 2 * (sliderHeight + ratioHeight + margin), ratioWidth, ratioHeight);
+    int currentY = startY;
+
+    auto placeComponent = [&](juce::Component& comp, int height)
+    {
+        comp.setBounds(startX, currentY, width, height);
+        currentY += height + margin;
+    };
+
+    placeComponent(thresholdSlider, 40);
+    placeComponent(attackSlider, 40);
+    placeComponent(releaseSlider, 40);
+    placeComponent(ratioComboBox, 20);
+    placeComponent(bypass, 20);
 }
+
