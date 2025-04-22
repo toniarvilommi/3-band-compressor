@@ -215,34 +215,34 @@ juce::AudioProcessorValueTreeState::ParameterLayout _3bandcompressorAudioProcess
 {
     using namespace juce;
     using Range = NormalisableRange<float>;
-    
+
     APVTS::ParameterLayout layout;
 
+    // threshold
     layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Threshold", 1), "Threshold", Range(-60.0f, 12.0f, 1.0f, 1.0f), 0.0f));
 
-    auto attackReleaseRange = Range(5.0f, 500.0f, 1.0f, 1.0f);
-    
-    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Attack", 1), "Attack", attackReleaseRange, 50));
-    
-    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Release", 1), "Release", attackReleaseRange, 250));
-    
-    auto choices = std::vector<double> { 1, 1.5, 2, 3, 4, 5, 6, 7, 8, 9, 10, 15, 20, 50, 100 };
-    juce::StringArray stringArray;
-    for (auto value : choices) {
-        stringArray.add(juce::String(value, 1));
-    }
-    
-    DBG("Ratio Choices: " + stringArray.joinIntoString(", "));
-    
-    layout
-        .add(std::make_unique<AudioParameterChoice>(
-        juce::ParameterID("Ratio", 1), "Ratio", stringArray, 3));
+    // attack
+    auto attackRange = Range(5.0f, 500.0f, 1.0f, 1.0f);
+    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Attack", 1), "Attack", attackRange, 50));
 
+    // release
+    auto releaseRange = Range(10.0f, 1000.0f, 1.0f, 1.0f); // example range for release
+    layout.add(std::make_unique<AudioParameterFloat>(juce::ParameterID("Release", 1), "Release", releaseRange, 250));
+
+    // ratio
+    juce::StringArray stringArray { "1", "1.5", "2", "3", "4", "5", "6", "7", "8", "9", "10", "15", "20", "50", "100" };
+
+    DBG("Ratio Choices: " + stringArray.joinIntoString(", "));
+
+    layout.add(std::make_unique<AudioParameterChoice>(
+        juce::ParameterID("Ratio", 1), "Ratio", stringArray, 3)); // default to "3"
+
+    // bypass
     layout.add(std::make_unique<AudioParameterBool>(juce::ParameterID("Bypass", 1), "Bypass", false));
-    
-    
+
     return layout;
 }
+
 
 
 
