@@ -93,8 +93,14 @@ void _3bandcompressorAudioProcessor::changeProgramName (int index, const juce::S
 //==============================================================================
 void _3bandcompressorAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    // Use this method as the place to do any pre-playback
-    // initialisation that you need..
+    // Prepare compressor
+    // Add spec object to compressor
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = samplesPerBlock;
+    spec.numChannels = getTotalNumOutputChannels();
+    spec.sampleRate = sampleRate;
+    
+    compressor.prepare(spec);
 }
 
 void _3bandcompressorAudioProcessor::releaseResources()
