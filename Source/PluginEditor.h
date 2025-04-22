@@ -31,6 +31,7 @@ private:
     juce::ToggleButton bypass;
     
     // === Attachments ===
+    /** These attach the ui values to the PluginProcessor so you can alter the dsp with the ui values */
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> thresholdAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> attackAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::SliderAttachment> releaseAttachment;
