@@ -13,6 +13,20 @@ public:
     void paint (juce::Graphics&) override;
     void resized() override;
 
+    template <typename ComponentType>
+    void addComponentWithLabel(ComponentType& component, juce::Label& label, const juce::String& labelText, bool labelOnLeft = true)
+    {
+        // Add and configure the component
+        addAndMakeVisible(component);
+
+        // Configure the label
+        label.setText(labelText, juce::dontSendNotification);
+        label.attachToComponent(&component, labelOnLeft);
+        label.setJustificationType(juce::Justification::centredRight);
+        addAndMakeVisible(label);
+    }
+
+    
 private:
     _3bandcompressorAudioProcessor& audioProcessor;
 
@@ -25,7 +39,7 @@ private:
     juce::ComboBox ratioComboBox;
     
     // === Labelss ===
-    juce::Label thresholdLabel, attackLabel, releaseLabel, ratioLabel;
+    juce::Label thresholdLabel, attackLabel, releaseLabel, ratioLabel, bypassLabel;
     
     // === Checkbox ===
     juce::ToggleButton bypass;

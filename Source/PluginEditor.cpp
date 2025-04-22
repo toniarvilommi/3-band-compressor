@@ -17,31 +17,24 @@ _3bandcompressorAudioProcessorEditor::_3bandcompressorAudioProcessorEditor (_3ba
     setSize (500, 400);
 
     // === THRESHOLD SLIDER ===
-    addSliderWithLabel(thresholdSlider, thresholdLabel, "Threshold", "Threshold");
+    addComponentWithLabel(thresholdSlider, thresholdLabel, "Threshold");
     thresholdAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
         audioProcessor.apvts, "Threshold", thresholdSlider);
 
     // === ATTACK SLIDER ===
-    addSliderWithLabel(attackSlider, attackLabel, "Attack", "Attack");
+    addComponentWithLabel(attackSlider, attackLabel, "Attack");
     attackAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
         audioProcessor.apvts, "Attack", attackSlider);
 
     // === RELEASE SLIDER ===
-    addSliderWithLabel(releaseSlider, releaseLabel, "Release", "Release");
+    addComponentWithLabel(releaseSlider, releaseLabel, "Release");
     releaseAttachment = std::make_unique<juce::AudioProcessorValueTreeState::SliderAttachment>(
         audioProcessor.apvts, "Release", releaseSlider);
     
     // === COMBOBOX ===
-    addAndMakeVisible(ratioComboBox);
-    
-    // === CHECKBOX ===
-    addAndMakeVisible(bypass);
-    bypass.setButtonText("Bypass");
-    
-    bypassAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "Bypass", bypass);
-
     // fetch and render choices from apvts
     // cast is checking if "Ratio" is nullptr (false) or AudioParameterChoice (true)
+    addComponentWithLabel(ratioComboBox, ratioLabel, "Ratio");
     if (auto* choiceParam = dynamic_cast<juce::AudioParameterChoice*>(audioProcessor.apvts.getParameter("Ratio")))
     {
         ratioComboBox.addItemList(choiceParam->choices, 1);
@@ -50,21 +43,12 @@ _3bandcompressorAudioProcessorEditor::_3bandcompressorAudioProcessorEditor (_3ba
             audioProcessor.apvts, "Ratio", ratioComboBox);
     }
     
-    DBG("ComboBox items count: " + juce::String(ratioComboBox.getNumItems()));
-}
+    
+    
+    // === CHECKBOX ===
+    addComponentWithLabel(bypass, bypassLabel, "Bypass");
+    bypassAttachment = std::make_unique<juce::AudioProcessorValueTreeState::ButtonAttachment>(audioProcessor.apvts, "Bypass", bypass);
 
-void _3bandcompressorAudioProcessorEditor::addSliderWithLabel(juce::Slider& slider, juce::Label& label, const juce::String& paramID, const juce::String& labelText)
-{
-    // Slider
-    slider.setSliderStyle(juce::Slider::LinearHorizontal);
-    slider.setTextBoxStyle(juce::Slider::TextBoxRight, false, 60, 20);
-    addAndMakeVisible(slider);
-
-    // Label
-    label.setText(labelText, juce::dontSendNotification);
-    label.attachToComponent(&slider, true);
-    label.setJustificationType(juce::Justification::centredRight);
-    addAndMakeVisible(label);
 }
 
 
@@ -87,7 +71,7 @@ void _3bandcompressorAudioProcessorEditor::paint (juce::Graphics& g)
 void _3bandcompressorAudioProcessorEditor::resized()
 {
     const int margin = 10;
-    const int startX = 80;
+    const int startX = 120;
     const int startY = 30;
     const int width = 300;
 
