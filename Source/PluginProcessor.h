@@ -10,6 +10,47 @@
 
 #include <JuceHeader.h>
 
+struct CompressorBand
+{
+    // pointers to parameters that control the compressor
+    juce::AudioParameterFloat* attack {nullptr};
+    juce::AudioParameterFloat* release {nullptr};
+    juce::AudioParameterFloat* threshold {nullptr};
+    juce::AudioParameterChoice* ratio {nullptr};
+    juce::AudioParameterBool* bypass {nullptr};
+    
+    // called to prepare the compressor for audio processing
+    void prepare(const juce::dsp::ProcessSpec& spec)
+    {
+        compressor.prepare(spec);
+    }
+    
+    // updates the compressor's internal settings from the parameter values
+    void updateCompressorSettings()
+    {
+        compressor.setAttack(attack->get());
+        compressor.setRelease(release->get());
+        compressor.setThreshold(threshold->get());
+        compressor.setRatio(ratio->getCurrentChoiceName().getFloatValue());
+    }
+    
+    // processes the audio buffer through the compressor
+    void process(juce::AudioBuffer<float>& buffer)
+    {
+        auto block = juce::dsp::AudioBlock<float>(buffer); // wrap buffer in a dsp block
+        auto context = juce::dsp::ProcessContextReplacing<float>(block); // context for in-place processing
+        
+        bool isBypassed = bypass->get(); // check if we should bypass
+        context.isBypassed = isBypassed; // set bypass flag
+        
+        compressor.process(context); // process the block
+    }
+    
+private:
+    juce::dsp::Compressor<float> compressor; // the actual juce dsp compressor
+};
+
+
 //==============================================================================
 /**
 */
@@ -63,15 +104,8 @@ public:
 private:
     //==============================================================================
     
-    juce::dsp::Compressor<float> compressor;
-    
-    // add pointers to layout parameters
-    
-    juce::AudioParameterFloat* attack {nullptr};
-    juce::AudioParameterFloat* release {nullptr};
-    juce::AudioParameterFloat* threshold {nullptr};
-    juce::AudioParameterChoice* ratio {nullptr};
-    juce::AudioParameterBool* bypass {nullptr};
+    // Define compressor band 1
+    CompressorBand compressor;
     
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (_3bandcompressorAudioProcessor)
 };
